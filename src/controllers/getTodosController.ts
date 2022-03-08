@@ -11,10 +11,7 @@ const getTodos = async (_req: Request, res: Response): Promise<void> => {
     const todos = await pool.query('SELECT * FROM todos');
 
     let responseMessage = 'Todo tasks were fetched successfully';
-    let responseData: Todos = todos.rows[0];
-
-    console.log('todos.rowwssss >>', todos.rows);
-    console.log('todos >>', todos);
+    let responseData: [Todos] = todos.rows;
 
     res.status(200).json(successResponseBody(responseMessage, responseData));
   } catch (error) {

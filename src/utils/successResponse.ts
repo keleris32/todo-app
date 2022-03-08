@@ -2,7 +2,7 @@ import { Todos } from '../types/todos';
 
 export const successResponseBody = (
   message: string,
-  responseData: Todos | null
+  responseData: Todos | null | [Todos]
 ): object => {
   return {
     success: true,
