@@ -18,9 +18,6 @@ const createTodo = async (req: Request, res: Response): Promise<void> => {
       [description]
     );
 
-    console.log('Alll Todos', JSON.stringify(todo, null, 2));
-    console.log('Todo rowss >>>', JSON.stringify(todo.rows[0], null, 2));
-
     let responseMessage = 'Todo task was created successfully';
     let responseData: object = todo.rows[0];
 

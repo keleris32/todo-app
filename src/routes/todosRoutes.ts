@@ -24,10 +24,10 @@ todoRouter.put('/todos/update/:id', updateTodo);
 
 // @desc delete a todo
 // @route DELETE /api/todos/delete/:id
-todoRouter.delete('/todos/update/:id', deleteTodo);
+todoRouter.delete('/todos/delete/:id', deleteTodo);
 
 // @desc complete a todo
 // @route PUT /api/todos/complete/:id
-todoRouter.put('/todos/update/:id', completeTodo);
+todoRouter.put('/todos/complete/:id', completeTodo);
 
 export default todoRouter;
