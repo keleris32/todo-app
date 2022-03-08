@@ -14,10 +14,10 @@ const updateTodo = async (req: Request, res: Response): Promise<void> => {
       throw new Error('Please provide the required credentials!');
     }
 
-    await pool.query('UPDATE todos SET description = $1 WHERE id = $2', [
-      description,
-      id,
-    ]);
+    await pool.query(
+      'UPDATE todos SET description = $1, updated_at = NOW() WHERE id = $2',
+      [description, id]
+    );
 
     let responseMessage = 'Todo task was updated successfully';
     let responseData: null = null;

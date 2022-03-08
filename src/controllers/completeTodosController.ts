@@ -15,10 +15,10 @@ const completeTodo = async (req: Request, res: Response): Promise<void> => {
 
     let completed = true;
 
-    await pool.query('UPDATE todos SET completed = $1 WHERE id = $2', [
-      completed,
-      id,
-    ]);
+    await pool.query(
+      'UPDATE todos SET completed = $1, updated_at = NOW() WHERE id = $2',
+      [completed, id]
+    );
 
     let responseMessage = 'Todo task was completed successfully';
     let responseData: null = null;

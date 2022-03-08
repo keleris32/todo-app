@@ -13,10 +13,7 @@ const completeTodo = async (req, res) => {
             throw new Error('Please provide the required credential!');
         }
         let completed = true;
-        await dbConnector_1.default.query('UPDATE todos SET completed = $1 WHERE id = $2', [
-            completed,
-            id,
-        ]);
+        await dbConnector_1.default.query('UPDATE todos SET completed = $1, updated_at = NOW() WHERE id = $2', [completed, id]);
         let responseMessage = 'Todo task was completed successfully';
         let responseData = null;
         res.status(200).json((0, successResponse_1.successResponseBody)(responseMessage, responseData));
