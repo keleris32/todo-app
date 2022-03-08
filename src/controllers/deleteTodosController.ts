@@ -7,7 +7,7 @@ import pool from '../config/dbConnector';
 
 const deleteTodo = async (req: Request, res: Response): Promise<void> => {
   try {
-    const id: string = req.body.id;
+    const id: string = req.params.id;
 
     if (!id) {
       throw new Error('Please provide required credential!');
@@ -16,7 +16,7 @@ const deleteTodo = async (req: Request, res: Response): Promise<void> => {
     await pool.query('DELETE FROM todos WHERE id = $1', [id]);
 
     let responseMessage = 'Todo task was deleted successfully';
-    let responseData: object = {};
+    let responseData: null = null;
 
     res.status(200).json(successResponseBody(responseMessage, responseData));
   } catch (error) {

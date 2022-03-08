@@ -12,11 +12,11 @@ const createTodo = async (req, res) => {
         if (!description) {
             throw new Error('Please enter a todo!');
         }
-        const todo = await dbConnector_1.default.query('INSERT INTO todos (description) VALUES ( $1 )', [description]);
+        const todo = await dbConnector_1.default.query('INSERT INTO todos (description) VALUES ( $1 ) returning *', [description]);
         console.log('Alll Todos', JSON.stringify(todo, null, 2));
         console.log('Todo rowss >>>', JSON.stringify(todo.rows[0], null, 2));
         let responseMessage = 'Todo task was created successfully';
-        let responseData = {};
+        let responseData = todo.rows[0];
         res.status(201).json((0, successResponse_1.successResponseBody)(responseMessage, responseData));
     }
     catch (error) {

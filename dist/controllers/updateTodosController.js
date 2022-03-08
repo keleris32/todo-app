@@ -8,8 +8,9 @@ const successResponse_1 = require("../utils/successResponse");
 const dbConnector_1 = __importDefault(require("../config/dbConnector"));
 const updateTodo = async (req, res) => {
     try {
-        const { id, description } = req.body;
-        if (!id) {
+        const { description } = req.body;
+        const { id } = req.params;
+        if (!id || !description) {
             throw new Error('Please provide the required credentials!');
         }
         await dbConnector_1.default.query('UPDATE todos SET description = $1 WHERE id = $2', [
@@ -17,7 +18,7 @@ const updateTodo = async (req, res) => {
             id,
         ]);
         let responseMessage = 'Todo task was updated successfully';
-        let responseData = {};
+        let responseData = null;
         res.status(200).json((0, successResponse_1.successResponseBody)(responseMessage, responseData));
     }
     catch (error) {

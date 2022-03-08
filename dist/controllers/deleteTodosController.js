@@ -8,13 +8,13 @@ const successResponse_1 = require("../utils/successResponse");
 const dbConnector_1 = __importDefault(require("../config/dbConnector"));
 const deleteTodo = async (req, res) => {
     try {
-        const id = req.body.id;
+        const id = req.params.id;
         if (!id) {
             throw new Error('Please provide required credential!');
         }
         await dbConnector_1.default.query('DELETE FROM todos WHERE id = $1', [id]);
         let responseMessage = 'Todo task was deleted successfully';
-        let responseData = {};
+        let responseData = null;
         res.status(200).json((0, successResponse_1.successResponseBody)(responseMessage, responseData));
     }
     catch (error) {

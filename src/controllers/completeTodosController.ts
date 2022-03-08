@@ -1,14 +1,13 @@
 import { Request, Response } from 'express';
 import { errorResponseBody } from '../utils/errorResponse';
 import { successResponseBody } from '../utils/successResponse';
-import { Todos } from '../types/todos';
 
 // @ts-ignore
 import pool from '../config/dbConnector';
 
 const completeTodo = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { id }: Todos = req.body;
+    const { id } = req.params;
 
     if (!id) {
       throw new Error('Please provide the required credential!');
@@ -22,7 +21,7 @@ const completeTodo = async (req: Request, res: Response): Promise<void> => {
     ]);
 
     let responseMessage = 'Todo task was completed successfully';
-    let responseData: object = {};
+    let responseData: null = null;
 
     res.status(200).json(successResponseBody(responseMessage, responseData));
   } catch (error) {

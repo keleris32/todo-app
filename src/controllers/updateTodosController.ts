@@ -1,16 +1,16 @@
 import { Request, Response } from 'express';
 import { errorResponseBody } from '../utils/errorResponse';
 import { successResponseBody } from '../utils/successResponse';
-import { Todos } from '../types/todos';
 
 // @ts-ignore
 import pool from '../config/dbConnector';
 
 const updateTodo = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { id, description }: Todos = req.body;
+    const { description } = req.body;
+    const { id } = req.params;
 
-    if (!id) {
+    if (!id || !description) {
       throw new Error('Please provide the required credentials!');
     }
 
@@ -20,7 +20,7 @@ const updateTodo = async (req: Request, res: Response): Promise<void> => {
     ]);
 
     let responseMessage = 'Todo task was updated successfully';
-    let responseData: object = {};
+    let responseData: null = null;
 
     res.status(200).json(successResponseBody(responseMessage, responseData));
   } catch (error) {

@@ -14,7 +14,7 @@ const createTodo = async (req: Request, res: Response): Promise<void> => {
     }
 
     const todo = await pool.query(
-      'INSERT INTO todos (description) VALUES ( $1 )',
+      'INSERT INTO todos (description) VALUES ( $1 ) returning *',
       [description]
     );
 
@@ -22,7 +22,7 @@ const createTodo = async (req: Request, res: Response): Promise<void> => {
     console.log('Todo rowss >>>', JSON.stringify(todo.rows[0], null, 2));
 
     let responseMessage = 'Todo task was created successfully';
-    let responseData: object = {};
+    let responseData: object = todo.rows[0];
 
     res.status(201).json(successResponseBody(responseMessage, responseData));
   } catch (error) {

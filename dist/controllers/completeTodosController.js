@@ -8,7 +8,7 @@ const successResponse_1 = require("../utils/successResponse");
 const dbConnector_1 = __importDefault(require("../config/dbConnector"));
 const completeTodo = async (req, res) => {
     try {
-        const { id } = req.body;
+        const { id } = req.params;
         if (!id) {
             throw new Error('Please provide the required credential!');
         }
@@ -18,7 +18,7 @@ const completeTodo = async (req, res) => {
             id,
         ]);
         let responseMessage = 'Todo task was completed successfully';
-        let responseData = {};
+        let responseData = null;
         res.status(200).json((0, successResponse_1.successResponseBody)(responseMessage, responseData));
     }
     catch (error) {
