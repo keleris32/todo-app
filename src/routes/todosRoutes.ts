@@ -16,15 +16,15 @@ todoRouter.get('/todos', getTodos);
 
 // @desc create a todo
 // @route POST /api/todos/create
-todoRouter.post('/todos/create', createTodo);
+todoRouter.post('/todos', createTodo);
 
 // @desc update a todo
 // @route PUT /api/todos/update/:id
-todoRouter.put('/todos/update/:id', updateTodo);
+todoRouter.put('/todos/:id', updateTodo);
 
 // @desc delete a todo
 // @route DELETE /api/todos/delete/:id
-todoRouter.delete('/todos/delete/:id', deleteTodo);
+todoRouter.delete('/todos/:id', deleteTodo);
 
 // @desc complete a todo
 // @route PUT /api/todos/complete/:id
