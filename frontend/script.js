@@ -8,10 +8,11 @@ let filterSearch = document.querySelector('.filterSearch')
 let displayTodo = document.querySelector('.displayTodo')
 // let btn = document.querySelector('.btn')
 let newArr, li, checkbox, otherBtn, editBtn, deleteBtn;
+const complete = false
 let p = document.createElement('p')
 
 
-let init = () => {
+const init = () => {
     let inputValue = input.value
     // newArr = [inputValue];
 
@@ -33,8 +34,6 @@ let init = () => {
 
 
     if(inputValue === "" || input.value[0] === ' '){
-
-        
         p.innerHTML = "This cannot be empty"
         p.style.color = 'red'
         addNew.append(p)
@@ -65,7 +64,7 @@ let init = () => {
         });
 
         props.classList.remove('hidden')
-
+        postData()
         
        
     }
@@ -89,6 +88,8 @@ filterSearch.addEventListener('keypress', function(e){
 // let body = {}
 
 async function fetchAPI() {
+    
+
     let response = await fetch(`http://todo-app-keicee.herokuapp.com/api/todos/`, {
         "method": "GET",
         // body: JSON.stringify({
@@ -102,9 +103,28 @@ async function fetchAPI() {
 
     let data = await response.json()
     // deletePosts(data.data)
-    console.log(data);
+    console.log(data.data);
+    return data.data
 }
+
 fetchAPI()
+
+
+async function postData(){
+        let response = await fetch(`http://todo-app-keicee.herokuapp.com/api/todos/`, {
+            "method": "POST",
+            body: JSON.stringify({ 
+                description: input.value
+            }),
+            "headers": {
+                "Content-Type": "application/json; charset=UTF-8"
+            },
+        })
+    
+        let data = await response.json()
+        // deletePosts(data.data)
+        console.log(data);
+}
 
 // async function deletePosts(data){
 //     let reply 
