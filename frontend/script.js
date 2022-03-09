@@ -32,7 +32,7 @@ let init = () => {
     deleteBtn.innerHTML = `<i class="fa-light fa-trash"></i>`
 
 
-    if(inputValue === "" || inputValue.indexOf(' ') >= 0){
+    if(inputValue === "" || input.value[0] === ' '){
 
         
         p.innerHTML = "This cannot be empty"
@@ -86,18 +86,48 @@ filterSearch.addEventListener('keypress', function(e){
 })
 
 
-let body = {message: "Kelechi Egekenze"}
+// let body = {}
 
-async function fetchAPI(number) {
-    let response = await fetch(`http://todo-app-keicee.herokuapp.com/api/${number}`, {
-        "method": "PUT",
+async function fetchAPI() {
+    let response = await fetch(`http://todo-app-keicee.herokuapp.com/api/todos/`, {
+        "method": "GET",
+        // body: JSON.stringify({
+        //     id:"1", 
+        //     description: "Kelechi Egekenze"
+        // }),
         "headers": {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json; charset=UTF-8"
         },
-        data: JSON.stringify(body)
     })
 
     let data = await response.json()
+    // deletePosts(data.data)
     console.log(data);
 }
-fetchAPI(1)
+fetchAPI()
+
+// async function deletePosts(data){
+//     let reply 
+
+//     data.forEach(element => {
+//         reply = element.id
+//         console.log(reply);
+//     });
+
+//     console.log(reply);
+    
+//     let response = await fetch(`http://todo-app-keicee.herokuapp.com/api/todos/${reply}`, {
+//         "method": "DELETE",
+//         "headers": {
+//             "Content-Type": "application/json; charset=UTF-8"
+//         },
+        
+//     })
+    
+
+//     let datas = await response.json()
+//     // console.log(datas)
+// }
+
+
+
