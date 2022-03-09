@@ -7,9 +7,9 @@ const express_1 = __importDefault(require("express"));
 const controllers_1 = require("../controllers");
 const todoRouter = express_1.default.Router();
 todoRouter.get('/todos', controllers_1.getTodos);
-todoRouter.post('/todos/create', controllers_1.createTodo);
-todoRouter.put('/todos/update/:id', controllers_1.updateTodo);
-todoRouter.delete('/todos/delete/:id', controllers_1.deleteTodo);
+todoRouter.post('/todos', controllers_1.createTodo);
+todoRouter.put('/todos/:id', controllers_1.updateTodo);
+todoRouter.delete('/todos/:id', controllers_1.deleteTodo);
 todoRouter.put('/todos/complete/:id', controllers_1.completeTodo);
 exports.default = todoRouter;
 //# sourceMappingURL=todosRoutes.js.map
