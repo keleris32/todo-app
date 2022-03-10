@@ -6,7 +6,6 @@ let props = document.querySelector('.active')
 let addNew = document.querySelector('.add-new')
 let filterSearch = document.querySelector('.filterSearch')
 let displayTodo = document.querySelector('.displayTodo')
-// let btn = document.querySelector('.btn')
 let newArr, li, checkbox, otherBtn, editBtn, deleteBtn;
 const complete = false
 let p = document.createElement('p')
@@ -14,7 +13,6 @@ let p = document.createElement('p')
 
 const init = () => {
     let inputValue = input.value
-    // newArr = [inputValue];
 
     li = document.createElement('li')
     checkbox = document.createElement('input')
@@ -33,8 +31,18 @@ const init = () => {
     deleteBtn.innerHTML = `<i class="fa-light fa-trash"></i>`
 
 
-    if(inputValue === "" || input.value[0] === ' '){
+    if(inputValue === ""){
         p.innerHTML = "This cannot be empty"
+        p.style.color = 'red'
+        addNew.append(p)
+        
+        setTimeout(clear, 3000)
+        function clear(){
+            p.innerHTML = ''
+        }
+
+    }else if(input.value[0] === ' '){
+        p.innerHTML = "Spaces not allowed"
         p.style.color = 'red'
         addNew.append(p)
         
@@ -85,17 +93,11 @@ filterSearch.addEventListener('keypress', function(e){
 })
 
 
-// let body = {}
-
-async function fetchAPI() {
+async function fetchData() {
     
 
     let response = await fetch(`http://todo-app-keicee.herokuapp.com/api/todos/`, {
         "method": "GET",
-        // body: JSON.stringify({
-        //     id:"1", 
-        //     description: "Kelechi Egekenze"
-        // }),
         "headers": {
             "Content-Type": "application/json; charset=UTF-8"
         },
@@ -107,23 +109,23 @@ async function fetchAPI() {
     return data.data
 }
 
-fetchAPI()
+fetchData()
 
 
 async function postData(){
-        let response = await fetch(`http://todo-app-keicee.herokuapp.com/api/todos/`, {
-            "method": "POST",
-            body: JSON.stringify({ 
-                description: input.value
-            }),
-            "headers": {
-                "Content-Type": "application/json; charset=UTF-8"
-            },
-        })
-    
-        let data = await response.json()
-        // deletePosts(data.data)
-        console.log(data);
+    let response = await fetch(`http://todo-app-keicee.herokuapp.com/api/todos/`, {
+        "method": "POST",
+        body: JSON.stringify({ 
+            description: input.value
+        }),
+        "headers": {
+            "Content-Type": "application/json; charset=UTF-8"
+        },
+    })
+
+    let data = await response.json()
+    // deletePosts(data.data)
+    console.log(data);
 }
 
 // async function deletePosts(data){
