@@ -1,0 +1,100 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body{
+   box-sizing: border-box; 
+   height: 100vh;
+   
+}
+
+main{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.container{
+    width: 90%;
+    text-align: center;
+    margin-top: 50px;
+    /* color: #fff; */
+    /* height: inherit; */
+}
+
+.add-new,
+.filter{
+    background-color: teal;
+    width: 90%;
+    margin: 30px auto;
+    padding: 10px 0;
+}
+
+.active{
+    background-color: teal;
+    width: 90%;
+    margin: 30px auto;
+    padding: 10px 0;
+    height: fit-content;
+}
+
+.active .displayTodo{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin: 10px 20px;
+}
+
+.displayTodo li{
+    list-style: none;
+}
+
+.hidden{
+    display: none;
+}
+
+.add-h3{
+    position: relative;
+    right: 85px;
+}
+
+.filter-h3{
+    position: relative;
+    right: 99px;
+}
+
+.add-new input{
+    padding: 4px;
+    width: 80%;
+    outline: none;
+}
+
+.filter input{
+    padding: 4px;
+    width: 90%;
+    outline: none;
+}
+
+.addBtn{
+    background-color: rgb(8, 211, 8);
+    color: white;
+    padding: 4px;
+    outline: none;
+    position: relative;
+    right: 4px;
+}
+
+
+.otherBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.otherBtn button{
+    margin: 0 3px;
+    padding: 5px 5px;
+}
