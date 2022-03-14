@@ -6,35 +6,45 @@ let props = document.querySelector('.active')
 let addNew = document.querySelector('.add-new')
 let filterSearch = document.querySelector('.filterSearch')
 let displayTodo = document.querySelector('.displayTodo')
-// let btn = document.querySelector('.btn')
 let newArr, li, checkbox, otherBtn, editBtn, deleteBtn;
 const complete = false
+let completed = document.querySelector('.completed')
 let p = document.createElement('p')
 
 
 const init = () => {
     let inputValue = input.value
-    // newArr = [inputValue];
 
     li = document.createElement('li')
-    checkbox = document.createElement('input')
-    otherBtn = document.createElement('div')
-    editBtn = document.createElement('button')
-    deleteBtn = document.createElement('button')
+    li.className = 'listed-items'
+    // checkbox = document.createElement('input')
+    // otherBtn = document.createElement('div')
+    // editBtn = document.createElement('button')
+    // deleteBtn = document.createElement('button')
 
 
-    otherBtn.id = 'otherBtn'
-    editBtn.className = 'editBtn'
-    deleteBtn.className = 'deleteBtn'
-    checkbox.type = 'checkbox'
-    checkbox.className = 'checkbox'
+    // otherBtn.id = 'otherBtn'
+    // editBtn.className = 'editBtn'
+    // deleteBtn.className = 'deleteBtn'
+    // checkbox.type = 'checkbox'
+    // checkbox.className = 'checkbox'
 
-    editBtn.innerHTML = `<i class="fa-light fa-pencil"></i>`
-    deleteBtn.innerHTML = `<i class="fa-light fa-trash"></i>`
+    // editBtn.innerHTML = `<i class="fa-light fa-pencil"></i>`
+    // deleteBtn.innerHTML = `<i class="fa-light fa-trash"></i>`
 
 
-    if(inputValue === "" || input.value[0] === ' '){
+    if(inputValue === ""){
         p.innerHTML = "This cannot be empty"
+        p.style.color = 'red'
+        addNew.append(p)
+        
+        setTimeout(clear, 3000)
+        function clear(){
+            p.innerHTML = ''
+        }
+
+    }else if(input.value[0] === ' '){
+        p.innerHTML = "Spaces not allowed"
         p.style.color = 'red'
         addNew.append(p)
         
@@ -52,19 +62,20 @@ const init = () => {
             
             
             
-            li.innerHTML = element
+            li.innerHTML = `<input type='checkbox' data-check='check'> ${element} <div class = 'otherbtn'><button data-edit='edit'>Edit</button> <button data-delete='delete'>Delete</button></div>`
+            
 
-            otherBtn.append(editBtn)
-            otherBtn.append(deleteBtn)
+            // otherBtn.append(editBtn)
+            // otherBtn.append(deleteBtn)
 
-            displayTodo.appendChild(checkbox)
+            
             displayTodo.appendChild(li)
-            displayTodo.appendChild(otherBtn)
+            // displayTodo.appendChild(otherBtn)
 
         });
 
         props.classList.remove('hidden')
-        postData()
+        // postData()
         
        
     }
@@ -79,23 +90,48 @@ const init = () => {
 addBtn.addEventListener('click', init)
 
 
+displayTodo.addEventListener('DOMNodeInserted', function(e){
+    let listedItems = displayTodo.querySelectorAll('.listed-items')
+    // console.log(listedItems);
+    listedItems.forEach(element => {
+    // listedItems.addEventListener('click', function(e){
+        element.addEventListener('click', function(e){
+            if(e.target.dataset.check){
+                completed.append(element)
+                console.log('Checked');
+            }else if(e.target.dataset.edit){
+                console.log('edited');
+            }else if(e.target.dataset.delete){
+                displayTodo.removeChild(element)
+            }
+        // if(e.target && e.target.className == 'editBtn'){
+        //     // e.target.forEach(element => {
+        //         // completed.append(li)
+        //         console.log('Edit Button clicked')
+        //     // })
+        // }else if(e.target && e.target.className == 'deleteBtn'){
+        //     // displayTodo.remove(listedItem)
+        //     console.log('Delete Button clicked')
+        // }else if(e.target && e.target.className == 'checkbox'){
+        //     console.log('Checkbox is checked')
+        })
+
+    }) 
+})
+
+
+
 // Filter Todo and See if todo exists
 filterSearch.addEventListener('keypress', function(e){
     
 })
 
 
-// let body = {}
-
-async function fetchAPI() {
+async function fetchData() {
     
 
     let response = await fetch(`http://todo-app-keicee.herokuapp.com/api/todos/`, {
         "method": "GET",
-        // body: JSON.stringify({
-        //     id:"1", 
-        //     description: "Kelechi Egekenze"
-        // }),
         "headers": {
             "Content-Type": "application/json; charset=UTF-8"
         },
@@ -107,47 +143,26 @@ async function fetchAPI() {
     return data.data
 }
 
-fetchAPI()
+// fetchData()
 
 
 async function postData(){
-        let response = await fetch(`http://todo-app-keicee.herokuapp.com/api/todos/`, {
-            "method": "POST",
-            body: JSON.stringify({ 
-                description: input.value
-            }),
-            "headers": {
-                "Content-Type": "application/json; charset=UTF-8"
-            },
-        })
-    
-        let data = await response.json()
-        // deletePosts(data.data)
-        console.log(data);
+    let response = await fetch(`http://todo-app-keicee.herokuapp.com/api/todos/`, {
+        "method": "POST",
+        body: JSON.stringify({ 
+            description: input.value
+        }),
+        "headers": {
+            "Content-Type": "application/json; charset=UTF-8"
+        },
+    })
+
+    let data = await response.json()
+    // deletePosts(data.data)
+    console.log(data);
 }
 
-// async function deletePosts(data){
-//     let reply 
 
-//     data.forEach(element => {
-//         reply = element.id
-//         console.log(reply);
-//     });
-
-//     console.log(reply);
-    
-//     let response = await fetch(`http://todo-app-keicee.herokuapp.com/api/todos/${reply}`, {
-//         "method": "DELETE",
-//         "headers": {
-//             "Content-Type": "application/json; charset=UTF-8"
-//         },
-        
-//     })
-    
-
-//     let datas = await response.json()
-//     // console.log(datas)
-// }
 
 
 

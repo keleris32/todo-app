@@ -43,13 +43,15 @@ main{
 }
 
 .active .displayTodo{
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    /* display: grid;
+    grid-template-columns: repeat(3, 1fr); */
     margin: 10px 20px;
 }
 
 .displayTodo li{
     list-style: none;
+    display: flex;
+    justify-content: space-between;
 }
 
 .hidden{
