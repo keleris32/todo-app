@@ -34,7 +34,7 @@ main{
     padding: 10px 0;
 }
 
-.active{
+.active, .completed{
     background-color: teal;
     width: 90%;
     margin: 30px auto;
@@ -42,7 +42,8 @@ main{
     height: fit-content;
 }
 
-.active .displayTodo{
+.active .displayTodo,
+.completed .completedTodo{
     /* display: grid;
     grid-template-columns: repeat(3, 1fr); */
     margin: 10px 20px;
@@ -56,16 +57,6 @@ main{
 
 .hidden{
     display: none;
-}
-
-.add-h3{
-    position: relative;
-    right: 85px;
-}
-
-.filter-h3{
-    position: relative;
-    right: 99px;
 }
 
 .add-new input{
@@ -99,4 +90,11 @@ main{
 .otherBtn button{
     margin: 0 3px;
     padding: 5px 5px;
+}
+
+.completedTodo li{
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    text-decoration: line-through;
 }

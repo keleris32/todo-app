@@ -6,52 +6,27 @@ let props = document.querySelector('.active')
 let addNew = document.querySelector('.add-new')
 let filterSearch = document.querySelector('.filterSearch')
 let displayTodo = document.querySelector('.displayTodo')
-let newArr, li, checkbox, otherBtn, editBtn, deleteBtn;
-const complete = false
+let newArr, li
+let complete = false
 let completed = document.querySelector('.completed')
+let completedTodo = document.querySelector('.completedTodo')
 let p = document.createElement('p')
 
 
 const init = () => {
-    let inputValue = input.value
+    let inputValue = input.value.charAt(0).toUpperCase() + input.value.slice(1) // Capitalizes the first letter
 
     li = document.createElement('li')
     li.className = 'listed-items'
-    // checkbox = document.createElement('input')
-    // otherBtn = document.createElement('div')
-    // editBtn = document.createElement('button')
-    // deleteBtn = document.createElement('button')
-
-
-    // otherBtn.id = 'otherBtn'
-    // editBtn.className = 'editBtn'
-    // deleteBtn.className = 'deleteBtn'
-    // checkbox.type = 'checkbox'
-    // checkbox.className = 'checkbox'
-
-    // editBtn.innerHTML = `<i class="fa-light fa-pencil"></i>`
-    // deleteBtn.innerHTML = `<i class="fa-light fa-trash"></i>`
 
 
     if(inputValue === ""){
         p.innerHTML = "This cannot be empty"
-        p.style.color = 'red'
-        addNew.append(p)
-        
-        setTimeout(clear, 3000)
-        function clear(){
-            p.innerHTML = ''
-        }
+        displayError(p)
 
     }else if(input.value[0] === ' '){
         p.innerHTML = "Spaces not allowed"
-        p.style.color = 'red'
-        addNew.append(p)
-        
-        setTimeout(clear, 3000)
-        function clear(){
-            p.innerHTML = ''
-        }
+        displayError(p)
 
     }else{
         // Put todo in an array without duplicates
@@ -60,60 +35,57 @@ const init = () => {
         
         newArr.forEach(element => {
             
-            
-            
-            li.innerHTML = `<input type='checkbox' data-check='check'> ${element} <div class = 'otherbtn'><button data-edit='edit'>Edit</button> <button data-delete='delete'>Delete</button></div>`
-            
-
-            // otherBtn.append(editBtn)
-            // otherBtn.append(deleteBtn)
-
-            
+            li.innerHTML = `<input type='checkbox' data-check='check'> ${element} <div class = 'otherbtn'><button data-edit='edit' class='editBtn'>Edit</button> <button data-delete='delete'>Delete</button></div>`
+                
             displayTodo.appendChild(li)
-            // displayTodo.appendChild(otherBtn)
 
         });
 
-        props.classList.remove('hidden')
+        hideDivs()
         // postData()
-        
-       
+         
     }
     
     input.value =  ""
-    // clicked = document.querySelector('.checkbox')
-    // console.log(clicked);
+
 }
 
-// console.log(checkbox, otherBtn, editBtn, deleteBtn)
 
 addBtn.addEventListener('click', init)
 
-
-displayTodo.addEventListener('DOMNodeInserted', function(e){
+// This checks if an element was added after an event
+displayTodo.addEventListener('DOMNodeInserted', function(){
     let listedItems = displayTodo.querySelectorAll('.listed-items')
-    // console.log(listedItems);
+    let editBtn = displayTodo.querySelectorAll('.editBtn')
+    
     listedItems.forEach(element => {
-    // listedItems.addEventListener('click', function(e){
+        
+    
         element.addEventListener('click', function(e){
-            if(e.target.dataset.check){
-                completed.append(element)
-                console.log('Checked');
-            }else if(e.target.dataset.edit){
+
+            if(e.target.dataset.check) {
+
+                completedTodo.append(element)
+                complete = true
+                completed.classList.remove('hidden')
+                e.target.dataset.edit.disabled = true
+                // editBtn.disabled = true
+                hideDivs()
+                
+
+            }else if(e.target.dataset.edit) {
+                // let oldLetter = element
+                input.value = element.textContent.split(' ')
                 console.log('edited');
+                
+
             }else if(e.target.dataset.delete){
+
                 displayTodo.removeChild(element)
+                hideDivs()
+
             }
-        // if(e.target && e.target.className == 'editBtn'){
-        //     // e.target.forEach(element => {
-        //         // completed.append(li)
-        //         console.log('Edit Button clicked')
-        //     // })
-        // }else if(e.target && e.target.className == 'deleteBtn'){
-        //     // displayTodo.remove(listedItem)
-        //     console.log('Delete Button clicked')
-        // }else if(e.target && e.target.className == 'checkbox'){
-        //     console.log('Checkbox is checked')
+           
         })
 
     }) 
@@ -146,7 +118,8 @@ async function fetchData() {
 // fetchData()
 
 
-async function postData(){
+async function postData() {
+
     let response = await fetch(`http://todo-app-keicee.herokuapp.com/api/todos/`, {
         "method": "POST",
         body: JSON.stringify({ 
@@ -160,9 +133,30 @@ async function postData(){
     let data = await response.json()
     // deletePosts(data.data)
     console.log(data);
+
 }
 
 
+// Displays or hides the Active and complete sections
+function hideDivs() {
+
+    if(displayTodo.innerHTML === ''){
+        props.classList.add('hidden')
+    }else {
+        props.classList.remove('hidden')
+    }
+
+}
 
 
+// Displays the error message if the input is empty or has a whitespace before the first character.
+function displayError(p) {
+    p.style.color = 'red'
+    addNew.append(p)
+    
+    setTimeout(clear, 3000)
+    function clear(){
+        p.innerHTML = ''
+    }
+}
 
