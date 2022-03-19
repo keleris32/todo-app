@@ -7,15 +7,21 @@ let addNew = document.querySelector('.add-new')
 let filterSearch = document.querySelector('.filterSearch')
 let displayTodo = document.querySelector('.displayTodo')
 let newArr, li
+let inputValue
 let newBody = {}
 let complete = false
 let completed = document.querySelector('.completed')
 let completedTodo = document.querySelector('.completedTodo')
 let p = document.createElement('p')
+let modal = document.querySelector('#myModal')
+let changeTodo = document.querySelector('#changeTodo')
+let newTodoItem = document.querySelector('#newTodoItem')
 
 
 const init = () => {
-    let inputValue = input.value.charAt(0).toUpperCase() + input.value.slice(1) // Capitalizes the first letter
+     // Capitalizes the first letter
+    inputValue = input.value.charAt(0).toUpperCase() + input.value.slice(1)
+    inputValue.trim()
 
     li = document.createElement('li')
     li.className = 'listed-items'
@@ -23,10 +29,6 @@ const init = () => {
 
     if(inputValue === ""){
         p.innerHTML = "This cannot be empty"
-        displayError(p)
-
-    }else if(input.value[0] === ' '){
-        p.innerHTML = "Spaces not allowed"
         displayError(p)
 
     }else{
@@ -60,7 +62,7 @@ addBtn.addEventListener('click', init)
 displayTodo.addEventListener('DOMNodeInserted', async function(){
     let listedItems = displayTodo.querySelectorAll('.listed-items')
     let check = document.querySelectorAll('.listed-items input')
-    let getId = await fetchData()
+    // let getId = await fetchData()
     
     listedItems.forEach(element => {
         
@@ -94,7 +96,29 @@ displayTodo.addEventListener('DOMNodeInserted', async function(){
 
             }else if(e.target.dataset.edit) {
 
+                let oldElement = inputValue
+                newTodoItem.value = inputValue
+                modal.style.display = 'block'
                 
+                changeTodo.addEventListener('click', function(){
+                    // let elementary
+                    oldElement = newTodoItem.value.charAt(0).toUpperCase() + newTodoItem.value.slice(1)
+                    oldElement.trim()
+
+                    // getId.forEach(element1 => {
+
+                        check.forEach(element3 => {
+                            // elementary = element.nextSibling.textContent.trim()
+                            // console.log(elementary.nextSibling.textContent);
+
+                            element3.nextSibling.textContent = oldElement
+
+                            modal.style.display = 'none'
+                            // console.log(oldElement, element3);
+                        })
+                    // console.log(oldElement);
+                    // })
+                })
 
             }else if(e.target.dataset.delete){
 
@@ -113,7 +137,7 @@ displayTodo.addEventListener('DOMNodeInserted', async function(){
                         }
                     })
                     
-                })  
+                })
                              
 
             }
@@ -143,7 +167,7 @@ async function fetchData() {
 
     let data = await response.json()
     // deletePosts(data.data)
-    // console.log(data.data);
+    console.log(data.data);
     return data.data
 }
 
@@ -155,7 +179,7 @@ async function postData() {
     let response = await fetch(`http://todo-app-keicee.herokuapp.com/api/todos/`, {
         "method": "POST",
         body: JSON.stringify({
-            description: input.value
+            description: inputValue
         }),
         "headers": {
             "Content-Type": "application/json; charset=UTF-8"
@@ -168,13 +192,11 @@ async function postData() {
 
 }
 
-async function updateTodo(id){
+async function updateTodo(id, newBody){
 
     let response = await fetch(`http://todo-app-keicee.herokuapp.com/api/todos/${id}`, {
         "method": "PUT",
-        body: JSON.stringify({
-            description: 'Egekenze Kelechi'
-        }),
+        body: JSON.stringify(newBody),
         "headers": {
             "Content-Type": "application/json; charset=UTF-8"
         },
@@ -199,8 +221,7 @@ async function addCompletedTodo(id, newBody){
     })
 
     let data = await response.json()
-    // deletePosts(data.data)
-    console.log(data);
+    
 }
 
 
@@ -209,9 +230,6 @@ async function deleteTodo(id){
 
     let response = await fetch(`http://todo-app-keicee.herokuapp.com/api/todos/${id}`, {
         "method": "DELETE",
-        // body: JSON.stringify({
-        //     description: 'Egekenze Kelechi'
-        // }),
         "headers": {
             "Content-Type": "application/json; charset=UTF-8"
         },
@@ -219,7 +237,7 @@ async function deleteTodo(id){
 
     let data = await response.json()
     // deletePosts(data.data)
-    console.log(data);
+    // console.log(data);
 }
 
 
