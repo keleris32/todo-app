@@ -45,7 +45,7 @@ const init = () => {
         });
 
         hideDivs()
-        // postData()
+        postData()
          
     }
     
@@ -61,8 +61,9 @@ addBtn.addEventListener('click', init)
 // This checks if an element was added after an event
 displayTodo.addEventListener('DOMNodeInserted', async function(){
     let listedItems = displayTodo.querySelectorAll('.listed-items')
+    
     let check = document.querySelectorAll('.listed-items input')
-    // let getId = await fetchData()
+    let getId = await fetchData()
     
     listedItems.forEach(element => {
         
@@ -95,30 +96,56 @@ displayTodo.addEventListener('DOMNodeInserted', async function(){
                 
 
             }else if(e.target.dataset.edit) {
+                let oldElement = e.target.parentNode.previousSibling.textContent
+                oldElement.trim()
 
-                let oldElement = inputValue
-                newTodoItem.value = inputValue
                 modal.style.display = 'block'
-                
-                changeTodo.addEventListener('click', function(){
-                    // let elementary
-                    oldElement = newTodoItem.value.charAt(0).toUpperCase() + newTodoItem.value.slice(1)
-                    oldElement.trim()
+                newTodoItem.value = oldElement
+                let newValue = newTodoItem.value.charAt(0).toUpperCase() + newTodoItem.value.slice(1)
+                newValue.trim()
 
-                    // getId.forEach(element1 => {
+                getId.forEach(element1 => {
+                    
 
-                        check.forEach(element3 => {
-                            // elementary = element.nextSibling.textContent.trim()
-                            // console.log(elementary.nextSibling.textContent);
+                    check.forEach(element2 => {
+                        
+                        changeTodo.addEventListener('click', function() {
 
-                            element3.nextSibling.textContent = oldElement
-
-                            modal.style.display = 'none'
-                            // console.log(oldElement, element3);
+                            // This gets the textContent of the li element.
+                            if(element1.description === element2.nextSibling.textContent.trim()){
+                                newBody = {description:newTodoItem.value}
+                                updateTodo(element1.id, newBody)
+                                modal.style.display = 'none'
+                                console.log('clicked');
+                            }
                         })
-                    // console.log(oldElement);
-                    // })
+
+                    })
                 })
+
+                // changeTodo.addEventListener('click', function(){
+                //     e.target.parentNode.previousSibling.textContent.replace(oldElement,newTodoItem.value)
+                //     modal.style.display = 'none'
+                //     console.log(e.target.parentNode.previousSibling.textContent)
+                // })
+
+                // modal.addEventListener('click', function(e){
+                //     if(e.target.dataset.change){
+                //         // oldElement = newTodoItem.value
+                //         li.innerHTML = `<input type='checkbox' data-check='check'> ${newTodoItem.value} <div class = 'otherbtn'><button data-edit='edit' class='editBtn'>Edit</button> <button data-delete='delete'>Delete</button></div>`
+                //         displayTodo.replace(oldElement, li)
+                //         modal.style.display = 'none'
+                //         console.log('Change button was clicked!')
+                //     }
+                // })
+
+                // check.forEach(element3 => {
+                    // let oldElement = element3.nextSibling.textContent.trim()      
+                // if(e.target && e.target.id == 'changeTodo'){
+                //     // oldElement = newTodoItem.value
+                //     console.log('Clicked the change button');
+                // }
+                
 
             }else if(e.target.dataset.delete){
 
@@ -172,7 +199,6 @@ async function fetchData() {
 }
 
 fetchData()
-
 
 async function postData() {
 
@@ -264,3 +290,19 @@ function displayError(p) {
     }
 }
 
+// changeTodo.addEventListener('click', function(e){
+//     // let elementary
+//     let newElement = newTodoItem.value.charAt(0).toUpperCase() + newTodoItem.value.slice(1)
+//     newElement.trim()
+//     console.log(e.target.parentNode.previousSibling.textContent)
+//     e.target.parentNode.previousSibling.textContent = newElement
+//     // oldElement.trim()
+//     // console.log(oldElement);
+
+// // getId.forEach(element1 => {
+
+//     // element3.nextSibling.textContent = oldElement
+
+//     modal.style.display = 'none'
+// // })
+// })
