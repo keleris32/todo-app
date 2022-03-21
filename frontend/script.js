@@ -6,42 +6,30 @@ let props = document.querySelector('.active')
 let addNew = document.querySelector('.add-new')
 let filterSearch = document.querySelector('.filterSearch')
 let displayTodo = document.querySelector('.displayTodo')
-// let btn = document.querySelector('.btn')
-let newArr, li, checkbox, otherBtn, editBtn, deleteBtn;
-const complete = false
+let newArr, li
+let inputValue
+let newBody = {}
+let complete = false
+let completed = document.querySelector('.completed')
+let completedTodo = document.querySelector('.completedTodo')
 let p = document.createElement('p')
+let modal = document.querySelector('#myModal')
+let changeTodo = document.querySelector('#changeTodo')
+let newTodoItem = document.querySelector('#newTodoItem')
 
 
 const init = () => {
-    let inputValue = input.value
-    // newArr = [inputValue];
+     // Capitalizes the first letter
+    inputValue = input.value.charAt(0).toUpperCase() + input.value.slice(1)
+    inputValue.trim()
 
     li = document.createElement('li')
-    checkbox = document.createElement('input')
-    otherBtn = document.createElement('div')
-    editBtn = document.createElement('button')
-    deleteBtn = document.createElement('button')
+    li.className = 'listed-items'
 
 
-    otherBtn.id = 'otherBtn'
-    editBtn.className = 'editBtn'
-    deleteBtn.className = 'deleteBtn'
-    checkbox.type = 'checkbox'
-    checkbox.className = 'checkbox'
-
-    editBtn.innerHTML = `<i class="fa-light fa-pencil"></i>`
-    deleteBtn.innerHTML = `<i class="fa-light fa-trash"></i>`
-
-
-    if(inputValue === "" || input.value[0] === ' '){
+    if(inputValue === ""){
         p.innerHTML = "This cannot be empty"
-        p.style.color = 'red'
-        addNew.append(p)
-        
-        setTimeout(clear, 3000)
-        function clear(){
-            p.innerHTML = ''
-        }
+        displayError(p)
 
     }else{
         // Put todo in an array without duplicates
@@ -50,33 +38,141 @@ const init = () => {
         
         newArr.forEach(element => {
             
-            
-            
-            li.innerHTML = element
-
-            otherBtn.append(editBtn)
-            otherBtn.append(deleteBtn)
-
-            displayTodo.appendChild(checkbox)
+            li.innerHTML = `<input type='checkbox' data-check='check'> ${element} <div class = 'otherbtn'><button data-edit='edit' class='editBtn'>Edit</button> <button data-delete='delete'>Delete</button></div>`
+                
             displayTodo.appendChild(li)
-            displayTodo.appendChild(otherBtn)
 
         });
 
-        props.classList.remove('hidden')
+        hideDivs()
         postData()
-        
-       
+         
     }
     
     input.value =  ""
-    // clicked = document.querySelector('.checkbox')
-    // console.log(clicked);
+
 }
 
-// console.log(checkbox, otherBtn, editBtn, deleteBtn)
 
 addBtn.addEventListener('click', init)
+
+
+
+// This checks if an element was added after an event
+displayTodo.addEventListener('DOMNodeInserted', async function(){
+    let listedItems = displayTodo.querySelectorAll('.listed-items')
+    
+    let check = document.querySelectorAll('.listed-items input')
+    let getId = await fetchData()
+    
+    listedItems.forEach(element => {
+        
+        element.addEventListener('click', function(e){
+            
+
+            if(e.target.dataset.check) {
+
+                completedTodo.append(element)
+                hideDivs()
+                complete = true 
+                completed.classList.remove('hidden')
+                
+                
+                
+                getId.forEach(element1 => {
+                    
+
+                    check.forEach(element2 => {
+                        
+                        // This gets the textContent of the li element.
+                        if(element1.description === element2.nextSibling.textContent.trim()){
+
+                            newBody = {description:element2.nextSibling.textContent.trim(), completed:complete}
+                            addCompletedTodo(element1.id, newBody)
+                        }
+                    })
+                    
+                })
+                
+
+            }else if(e.target.dataset.edit) {
+                let oldElement = e.target.parentNode.previousSibling.textContent
+                oldElement.trim()
+
+                modal.style.display = 'block'
+                newTodoItem.value = oldElement
+                let newValue = newTodoItem.value.charAt(0).toUpperCase() + newTodoItem.value.slice(1)
+                newValue.trim()
+
+                getId.forEach(element1 => {
+                    
+
+                    check.forEach(element2 => {
+                        
+                        changeTodo.addEventListener('click', function() {
+
+                            // This gets the textContent of the li element.
+                            if(element1.description === element2.nextSibling.textContent.trim()){
+                                newBody = {description:newTodoItem.value}
+                                updateTodo(element1.id, newBody)
+                                modal.style.display = 'none'
+                                console.log('clicked');
+                            }
+                        })
+
+                    })
+                })
+
+                // changeTodo.addEventListener('click', function(){
+                //     e.target.parentNode.previousSibling.textContent.replace(oldElement,newTodoItem.value)
+                //     modal.style.display = 'none'
+                //     console.log(e.target.parentNode.previousSibling.textContent)
+                // })
+
+                // modal.addEventListener('click', function(e){
+                //     if(e.target.dataset.change){
+                //         // oldElement = newTodoItem.value
+                //         li.innerHTML = `<input type='checkbox' data-check='check'> ${newTodoItem.value} <div class = 'otherbtn'><button data-edit='edit' class='editBtn'>Edit</button> <button data-delete='delete'>Delete</button></div>`
+                //         displayTodo.replace(oldElement, li)
+                //         modal.style.display = 'none'
+                //         console.log('Change button was clicked!')
+                //     }
+                // })
+
+                // check.forEach(element3 => {
+                    // let oldElement = element3.nextSibling.textContent.trim()      
+                // if(e.target && e.target.id == 'changeTodo'){
+                //     // oldElement = newTodoItem.value
+                //     console.log('Clicked the change button');
+                // }
+                
+
+            }else if(e.target.dataset.delete){
+
+                displayTodo.removeChild(element)
+                hideDivs()
+                getId.forEach(element1 => {
+                    
+
+                    check.forEach(element2 => {
+                        
+                        // This gets the textContent of the li element.
+                        if(element1.description === element2.nextSibling.textContent.trim()){
+
+                            // newBody = {description:element2.nextSibling.textContent.trim(), completed:complete}
+                            deleteTodo(element1.id) 
+                        }
+                    })
+                    
+                })
+                             
+
+            }
+           
+        })
+
+    }) 
+})
 
 
 // Filter Todo and See if todo exists
@@ -85,17 +181,12 @@ filterSearch.addEventListener('keypress', function(e){
 })
 
 
-// let body = {}
+async function fetchData() {
 
-async function fetchAPI() {
+    // await postData()
     
-
     let response = await fetch(`http://todo-app-keicee.herokuapp.com/api/todos/`, {
         "method": "GET",
-        // body: JSON.stringify({
-        //     id:"1", 
-        //     description: "Kelechi Egekenze"
-        // }),
         "headers": {
             "Content-Type": "application/json; charset=UTF-8"
         },
@@ -107,47 +198,111 @@ async function fetchAPI() {
     return data.data
 }
 
-fetchAPI()
+fetchData()
 
+async function postData() {
 
-async function postData(){
-        let response = await fetch(`http://todo-app-keicee.herokuapp.com/api/todos/`, {
-            "method": "POST",
-            body: JSON.stringify({ 
-                description: input.value
-            }),
-            "headers": {
-                "Content-Type": "application/json; charset=UTF-8"
-            },
-        })
-    
-        let data = await response.json()
-        // deletePosts(data.data)
-        console.log(data);
+    let response = await fetch(`http://todo-app-keicee.herokuapp.com/api/todos/`, {
+        "method": "POST",
+        body: JSON.stringify({
+            description: inputValue
+        }),
+        "headers": {
+            "Content-Type": "application/json; charset=UTF-8"
+        },
+    })
+
+    let data = await response.json()
+    // deletePosts(data.data)
+    console.log(data);
+
 }
 
-// async function deletePosts(data){
-//     let reply 
+async function updateTodo(id, newBody){
 
-//     data.forEach(element => {
-//         reply = element.id
-//         console.log(reply);
-//     });
+    let response = await fetch(`http://todo-app-keicee.herokuapp.com/api/todos/${id}`, {
+        "method": "PUT",
+        body: JSON.stringify(newBody),
+        "headers": {
+            "Content-Type": "application/json; charset=UTF-8"
+        },
+    })
 
-//     console.log(reply);
+    let data = await response.json()
+    // deletePosts(data.data)
+    console.log(data);
+}
+
+
+
+// Adds complete = true for checked Todos.
+async function addCompletedTodo(id, newBody){
+
+    let response = await fetch(`http://todo-app-keicee.herokuapp.com/api/todos/complete/${id}`, {
+        "method": "PUT",
+        body: JSON.stringify(newBody),
+        "headers": {
+            "Content-Type": "application/json; charset=UTF-8"
+        },
+    })
+
+    let data = await response.json()
     
-//     let response = await fetch(`http://todo-app-keicee.herokuapp.com/api/todos/${reply}`, {
-//         "method": "DELETE",
-//         "headers": {
-//             "Content-Type": "application/json; charset=UTF-8"
-//         },
-        
-//     })
+}
+
+
+
+async function deleteTodo(id){
+
+    let response = await fetch(`http://todo-app-keicee.herokuapp.com/api/todos/${id}`, {
+        "method": "DELETE",
+        "headers": {
+            "Content-Type": "application/json; charset=UTF-8"
+        },
+    })
+
+    let data = await response.json()
+    // deletePosts(data.data)
+    // console.log(data);
+}
+
+
+// Displays or hides the Active and complete sections
+function hideDivs() {
+
+    if(displayTodo.innerHTML === ''){
+        props.classList.add('hidden')
+    }else {
+        props.classList.remove('hidden')
+    }
+
+}
+
+
+// Displays the error message if the input is empty or has a whitespace before the first character.
+function displayError(p) {
+    p.style.color = 'red'
+    addNew.append(p)
     
+    setTimeout(clear, 3000)
+    function clear(){
+        p.innerHTML = ''
+    }
+}
 
-//     let datas = await response.json()
-//     // console.log(datas)
-// }
+// changeTodo.addEventListener('click', function(e){
+//     // let elementary
+//     let newElement = newTodoItem.value.charAt(0).toUpperCase() + newTodoItem.value.slice(1)
+//     newElement.trim()
+//     console.log(e.target.parentNode.previousSibling.textContent)
+//     e.target.parentNode.previousSibling.textContent = newElement
+//     // oldElement.trim()
+//     // console.log(oldElement);
 
+// // getId.forEach(element1 => {
 
+//     // element3.nextSibling.textContent = oldElement
 
+//     modal.style.display = 'none'
+// // })
+// })

@@ -24,8 +24,16 @@
             <div class="active hidden">
                 <h3 class="filter-h3">Active</h3>
                 <ul class="displayTodo"></ul>
+                <div id="myModal" class="modal">
+                    <h3>Edit todo item</h3>
+                    <input type="text" name="" id="newTodoItem">
+                    <button id="changeTodo" data-change="changeTodo">Change</button>
+                </div>
             </div>
-            <div class="completed"></div>
+            <div class="completed hidden">
+                <h3 class="filter-h3">Complete</h3>
+                <ul class="completedTodo"></ul>
+            </div>
         </div>
     </main>
 
